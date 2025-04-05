@@ -34,7 +34,3 @@ rest = Transform2D(1, 0, 0, 1, 57.5247, 15.0742)
 
 [node name="rest_target" type="Node2D" parent="."]
 position = Vector2(70, 1)
-
-[node name="Polygon2D" type="Polygon2D" parent="rest_target"]
-color = Color(0.652137, 0.212253, 0.0790172, 1)
-polygon = PackedVector2Array(-3, -2, 1, -5, 4, -1, -1, 4)

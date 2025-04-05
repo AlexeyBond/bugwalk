@@ -11,7 +11,7 @@ class_name Foot
 
 @export var flip_direction: bool = false
 
-@export var move_speed: float = 500.0
+@export var move_speed: float = 1000.0
 @export_range(0.1, 40.0) var move_want_threshold = 30.0
 @export_range(30.0, 60.0) var move_need_threshold = 35.0
 @export_range(0.0, 0.99) var move_step_overshoot = 0.9
@@ -67,3 +67,8 @@ func wants_move() -> bool:
 
 func needs_move() -> bool:
 	return _get_rest_distance() > move_need_threshold
+
+func _draw() -> void:
+	draw_circle(to_local(rest_target.global_position), 5, Color.RED)
+	draw_line(to_local(rest_target.global_position), to_local(target.global_position), Color.RED, 2.0)
+	queue_redraw()
