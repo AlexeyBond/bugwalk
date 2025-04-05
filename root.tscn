@@ -22,7 +22,6 @@ agent_radius = 90.64
 
 [node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("bug")]
 position = Vector2(524, 358)
-zoom = Vector2(0.5, 0.5)
 limit_left = -2000
 limit_top = -2000
 limit_right = 2000
@@ -53,5 +52,4 @@ navigation_polygon = SubResource("NavigationPolygon_pq8q7")
 polygon = PackedVector2Array(862, 138, 849, 1066, 1712, 1087, 1684, 817, 1041, 869, 1041, 296, 1702, 283, 1692, 55)
 
 [node name="Polygon2D" type="Polygon2D" parent="StaticBody2D" groups=["navigation_polygon_source_geometry_group"]]
-visible = false
 polygon = PackedVector2Array(888, 158, 870, 1061, 1697, 1069, 1679, 830, 1023, 893, 1023, 280, 1692, 270, 1679, 76)

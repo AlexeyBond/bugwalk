@@ -1,9 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://bdtas23trrln7"]
+[gd_scene load_steps=13 format=3 uid="uid://bdtas23trrln7"]
 
 [ext_resource type="PackedScene" uid="uid://drh7l5q0x1cv0" path="res://foot_l.tscn" id="1_c761e"]
 [ext_resource type="PackedScene" uid="uid://b24x4j7t0eoc1" path="res://foot.tscn" id="2_5tblr"]
+[ext_resource type="Texture2D" uid="uid://b26ovd3j5jent" path="res://sprites/path1408.png" id="2_6bggp"]
+[ext_resource type="Texture2D" uid="uid://c1rboo6d8tddo" path="res://sprites/path370.png" id="3_pghv7"]
 [ext_resource type="Script" uid="uid://dbph82u47iy1w" path="res://foot_brain.gd" id="3_xve05"]
+[ext_resource type="Texture2D" uid="uid://cpc6qvusgrcvc" path="res://sprites/path1154.png" id="4_mawgr"]
 [ext_resource type="Script" uid="uid://b6j0skkjsk10q" path="res://foot_group.gd" id="4_n80v8"]
+[ext_resource type="Texture2D" uid="uid://jmmuv6ywlxb2" path="res://sprites/path1540.png" id="6_d8ihr"]
 
 [sub_resource type="GDScript" id="GDScript_c761e"]
 script/source = "extends Node2D
@@ -120,12 +124,103 @@ foot_brain = NodePath("../FootBrain")
 agent = NodePath("NavigationAgent2D")
 
 [node name="fl0" parent="Body" instance=ExtResource("1_c761e")]
-position = Vector2(-39, -8)
+position = Vector2(-14.9482, 2.35593)
+flip_direction = false
+move_want_threshold = 10.9
+
+[node name="Bone2D" parent="Body/fl0/Skeleton2D" index="0"]
+rest = Transform2D(-0.967042, -0.254618, 0.254618, -0.967042, 0, 0)
+
+[node name="Polygon2D" parent="Body/fl0/Skeleton2D/Bone2D" index="0"]
+visible = false
+
+[node name="Bone2D2" parent="Body/fl0/Skeleton2D/Bone2D" index="1"]
+position = Vector2(57.0024, -0.853325)
+rotation = 0.900362
+rest = Transform2D(0.62132, 0.783544, -0.783544, 0.62132, 57.0024, -0.853325)
+
+[node name="Polygon2D" parent="Body/fl0/Skeleton2D/Bone2D/Bone2D2" index="0"]
+visible = false
+
+[node name="Bone2D" parent="Body/fl0/Skeleton2D/Bone2D/Bone2D2" index="1"]
+position = Vector2(39.8312, 10.932)
+rest = Transform2D(1, 0, 0, 1, 39.8312, 10.932)
+
+[node name="Path1408" type="Sprite2D" parent="Body/fl0/Skeleton2D/Bone2D/Bone2D2/Bone2D" index="0"]
+modulate = Color(0.560603, 0.321701, 1, 1)
+position = Vector2(24.3626, -4.05907)
+rotation = 1.8202
+scale = Vector2(0.500005, 0.500005)
+texture = ExtResource("2_6bggp")
+
+[node name="Path370" type="Sprite2D" parent="Body/fl0/Skeleton2D/Bone2D/Bone2D2" index="2"]
+modulate = Color(0.335949, 0.549719, 0.184414, 1)
+position = Vector2(19.5958, 10.1987)
+rotation = 1.59426
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_pghv7")
+
+[node name="Path1154" type="Sprite2D" parent="Body/fl0/Skeleton2D/Bone2D" index="2"]
+modulate = Color(0.792274, 0.773516, 0, 1)
+position = Vector2(27.5411, -2.67308)
+rotation = 2.88414
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_mawgr")
+
+[node name="rest_target" parent="Body/fl0" index="1"]
+position = Vector2(-61.3377, -55.5579)
 
 [node name="fr0" parent="Body" instance=ExtResource("2_5tblr")]
-position = Vector2(38, -16)
+position = Vector2(13.0439, 1.69048)
+flip_direction = true
+move_want_threshold = 10.667
+
+[node name="Bone2D" parent="Body/fr0/Skeleton2D" index="0"]
+position = Vector2(1.02349, 0.975952)
+rotation = -0.226105
+scale = Vector2(1, 1)
+
+[node name="Polygon2D" parent="Body/fr0/Skeleton2D/Bone2D" index="0"]
+visible = false
+
+[node name="Bone2D2" parent="Body/fr0/Skeleton2D/Bone2D" index="1"]
+position = Vector2(58.0981, -9.51886)
+rotation = -1.54162
+scale = Vector2(0.99999, 0.99999)
+
+[node name="Polygon2D" parent="Body/fr0/Skeleton2D/Bone2D/Bone2D2" index="0"]
+visible = false
+
+[node name="Bone2D" parent="Body/fr0/Skeleton2D/Bone2D/Bone2D2" index="1"]
+position = Vector2(35.5369, 17.3828)
+rotation = 0.61885
+
+[node name="Path1408" type="Sprite2D" parent="Body/fr0/Skeleton2D/Bone2D/Bone2D2/Bone2D" index="0"]
+modulate = Color(0.560603, 0.321701, 1, 1)
+position = Vector2(23.2195, 2.20607)
+rotation = 1.23441
+scale = Vector2(-0.5, 0.5)
+texture = ExtResource("2_6bggp")
+
+[node name="Path370" type="Sprite2D" parent="Body/fr0/Skeleton2D/Bone2D/Bone2D2" index="2"]
+modulate = Color(0.335949, 0.549719, 0.184414, 1)
+position = Vector2(18.7161, 3.27358)
+rotation = -0.937173
+scale = Vector2(0.5, -0.5)
+texture = ExtResource("3_pghv7")
+
+[node name="Path1154" type="Sprite2D" parent="Body/fr0/Skeleton2D/Bone2D" index="2"]
+modulate = Color(0.792274, 0.773516, 0, 1)
+position = Vector2(27.5411, -2.67308)
+rotation = 3.30466
+scale = Vector2(0.5, -0.5)
+texture = ExtResource("4_mawgr")
+
+[node name="rest_target" parent="Body/fr0" index="1"]
+position = Vector2(64.6029, -59.5522)
 
 [node name="Polygon2D" type="Polygon2D" parent="Body"]
+visible = false
 position = Vector2(2, 115)
 color = Color(0.641934, 0.641934, 0.641934, 1)
 polygon = PackedVector2Array(-2, -170, 40, -153, 28, -62, -30, -60, -52, -153)
@@ -165,6 +260,13 @@ radius = 41.45
 max_speed = 1357.86
 debug_enabled = true
 debug_path_custom_color = Color(0, 1, 0, 1)
+
+[node name="Path1540" type="Sprite2D" parent="Body"]
+modulate = Color(1, 0.273215, 0.60475, 1)
+position = Vector2(-0.548102, 19.0184)
+rotation = -0.0237683
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_d8ihr")
 
 [node name="Back" type="RigidBody2D" parent="."]
 position = Vector2(5.99994, 43)
@@ -210,3 +312,6 @@ feet = [NodePath("../../Back/fr1"), NodePath("../../Body/fl0"), NodePath("../../
 metadata/_custom_type_script = "uid://b6j0skkjsk10q"
 
 [connection signal="velocity_computed" from="Body/NavigationAgent2D" to="Body" method="_on_navigation_agent_2d_velocity_computed"]
+
+[editable path="Body/fl0"]
+[editable path="Body/fr0"]
