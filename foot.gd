@@ -11,7 +11,7 @@ class_name Foot
 
 @export var flip_direction: bool = false
 
-@export var move_speed: float = 500.0
+@export var move_speed: float = 800.0
 @export_range(0.1, 40.0) var move_want_threshold = 20.0
 @export_range(30.0, 60.0) var move_need_threshold = 35.0
 @export_range(0.0, 0.99) var move_step_overshoot = 0.9
@@ -48,7 +48,8 @@ func do_move():
 	var speed := move_speed
 	speed *= min(1.0, dst / move_want_threshold)
 	var target_pos := rest_target.global_position
-	target_pos += (target_pos - target.global_position).normalized() * move_want_threshold * move_step_overshoot
+	target_pos += (target_pos - target.global_position).normalized() * \
+		move_want_threshold * move_step_overshoot * randf_range(0.5, 1.0)
 	tween = get_tree().create_tween()
 	tween \
 		.tween_property(

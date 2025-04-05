@@ -1,8 +1,57 @@
-[gd_scene load_steps=2 format=3 uid="uid://cop3m2np4mns7"]
+[gd_scene load_steps=4 format=3 uid="uid://cop3m2np4mns7"]
 
 [ext_resource type="PackedScene" uid="uid://bdtas23trrln7" path="res://bug.tscn" id="1_pq8q7"]
 
+[sub_resource type="GDScript" id="GDScript_pq8q7"]
+script/source = "extends Camera2D
+
+@export var bug: Node2D
+
+func _process(delta: float) -> void:
+	global_position = bug.get_body_position()
+"
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_pq8q7"]
+vertices = PackedVector2Array(2122.73, -2029.67, 2094.98, 2028.36, 1881.79, 1146.59, 1849.44, 716.93, 1875.82, 345.203, -1894.49, 2028.36, 864.547, 1136.75, -1991.17, -2044.03, 885.969, 62.1016, 1850.15, -37.8516, 1200.64, 779.242, 1200.64, 355.289)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(2, 1, 5, 6), PackedInt32Array(6, 5, 7, 8), PackedInt32Array(8, 7, 0, 9), PackedInt32Array(3, 10, 11, 4), PackedInt32Array(9, 0, 4)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-2084, -2135, 2214, -2120, 2185, 2119, -1983, 2119)])
+source_geometry_mode = 1
+agent_radius = 90.64
+
 [node name="Root" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("bug")]
+position = Vector2(524, 358)
+zoom = Vector2(0.5, 0.5)
+limit_left = -2000
+limit_top = -2000
+limit_right = 2000
+limit_bottom = 2000
+limit_smoothed = true
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.8
+drag_top_margin = 0.8
+drag_right_margin = 0.8
+drag_bottom_margin = 0.8
+editor_draw_limits = true
+editor_draw_drag_margin = true
+script = SubResource("GDScript_pq8q7")
+bug = NodePath("../Bug")
 
 [node name="Bug" parent="." instance=ExtResource("1_pq8q7")]
 position = Vector2(528, 361)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(-87, 14)
+navigation_polygon = SubResource("NavigationPolygon_pq8q7")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" groups=["navigation_polygon_source_geometry_group"]]
+polygon = PackedVector2Array(862, 138, 849, 1066, 1712, 1087, 1684, 817, 1041, 869, 1041, 296, 1702, 283, 1692, 55)
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticBody2D" groups=["navigation_polygon_source_geometry_group"]]
+visible = false
+polygon = PackedVector2Array(888, 158, 870, 1061, 1697, 1069, 1679, 830, 1023, 893, 1023, 280, 1692, 270, 1679, 76)
