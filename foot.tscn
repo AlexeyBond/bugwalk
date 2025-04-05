@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://b24x4j7t0eoc1"]
+
+[ext_resource type="Script" uid="uid://cw2p0cbg2vwg1" path="res://foot.gd" id="1_agajq"]
+
+[node name="Foot" type="Node2D" node_paths=PackedStringArray("skeleton", "rest_target", "bone1", "bone2")]
+script = ExtResource("1_agajq")
+skeleton = NodePath("Skeleton2D")
+rest_target = NodePath("rest_target")
+bone1 = NodePath("Skeleton2D/Bone2D")
+bone2 = NodePath("Skeleton2D/Bone2D/Bone2D2")
+
+[node name="Skeleton2D" type="Skeleton2D" parent="."]
+
+[node name="Bone2D" type="Bone2D" parent="Skeleton2D"]
+rest = Transform2D(0.996204, 0.0866265, -0.0866265, 0.996204, 0, 0)
+metadata/_local_pose_override_enabled_ = true
+
+[node name="Polygon2D" type="Polygon2D" parent="Skeleton2D/Bone2D"]
+polygon = PackedVector2Array(0, 0, 19.2325, -9.70287, 58, -2, 24.6903, 6.88731)
+
+[node name="Bone2D2" type="Bone2D" parent="Skeleton2D/Bone2D"]
+position = Vector2(56, -2)
+scale = Vector2(0.99999, 0.99999)
+rest = Transform2D(0.99999, 0, 0, 0.99999, 73.8978, -4.41827)
+metadata/_local_pose_override_enabled_ = true
+
+[node name="Polygon2D" type="Polygon2D" parent="Skeleton2D/Bone2D/Bone2D2"]
+color = Color(0.239216, 1, 1, 1)
+polygon = PackedVector2Array(0, 0, 12.7785, -3.11881, 57.5247, 15.0743, 6.84405, 9.44306)
+
+[node name="Bone2D" type="Bone2D" parent="Skeleton2D/Bone2D/Bone2D2"]
+position = Vector2(57.5247, 15.0742)
+rest = Transform2D(1, 0, 0, 1, 57.5247, 15.0742)
+
+[node name="rest_target" type="Node2D" parent="."]
+position = Vector2(70, 1)
+
+[node name="Polygon2D" type="Polygon2D" parent="rest_target"]
+color = Color(0.652137, 0.212253, 0.0790172, 1)
+polygon = PackedVector2Array(-3, -2, 1, -5, 4, -1, -1, 4)

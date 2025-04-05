@@ -1,0 +1,108 @@
+[gd_scene load_steps=9 format=3 uid="uid://cop3m2np4mns7"]
+
+[ext_resource type="PackedScene" uid="uid://drh7l5q0x1cv0" path="res://foot_l.tscn" id="1_jnlp7"]
+[ext_resource type="PackedScene" uid="uid://b24x4j7t0eoc1" path="res://foot.tscn" id="1_pq8q7"]
+[ext_resource type="Script" uid="uid://b25h7ep6s5cvq" path="res://pin_joint_2d_with_limit.gd" id="2_28aoi"]
+[ext_resource type="Script" uid="uid://dbph82u47iy1w" path="res://foot_brain.gd" id="2_vvh5c"]
+[ext_resource type="Script" uid="uid://b6j0skkjsk10q" path="res://foot_group.gd" id="3_28aoi"]
+
+[sub_resource type="GDScript" id="GDScript_pq8q7"]
+script/source = "extends CharacterBody2D
+
+@onready var foot_brain: FootBrain = $\"../FootBrain\"
+
+func _process(delta: float) -> void:
+	if not foot_brain.needs_move():
+		#translate(
+			#100 * delta * (to_global(Vector2(0.0, Input.get_axis(\"move_forward\", \"move_back\"))) - global_position)
+		#)
+		rotate(delta * Input.get_axis(\"move_left\", \"move_right\"))
+		velocity = 100 * (to_global(Vector2(
+			0.0,
+			Input.get_axis(\"move_forward\", \"move_back\")
+		)) - global_position)
+		move_and_slide()
+		#apply_central_force(2000 * (to_global(Vector2(0.0, Input.get_axis(\"move_forward\", \"move_back\"))) - global_position))
+		#apply_torque(100000 * Input.get_axis(\"move_left\", \"move_right\"))
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vvh5c"]
+radius = 45.0
+height = 120.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_28aoi"]
+radius = 34.0
+height = 120.0
+
+[node name="Root" type="Node2D"]
+
+[node name="Body" type="CharacterBody2D" parent="."]
+position = Vector2(582, 234)
+rotation = 0.0237683
+script = SubResource("GDScript_pq8q7")
+
+[node name="fl0" parent="Body" instance=ExtResource("1_jnlp7")]
+position = Vector2(-39, -8)
+
+[node name="fr0" parent="Body" instance=ExtResource("1_pq8q7")]
+position = Vector2(38, -16)
+
+[node name="Polygon2D" type="Polygon2D" parent="Body"]
+position = Vector2(2, 115)
+color = Color(0.641934, 0.641934, 0.641934, 1)
+polygon = PackedVector2Array(-2, -170, 40, -153, 28, -62, -30, -60, -52, -153)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+position = Vector2(1, 2)
+shape = SubResource("CapsuleShape2D_vvh5c")
+
+[node name="PinJoint2D" type="PinJoint2D" parent="Body"]
+position = Vector2(3, 55)
+node_a = NodePath("..")
+node_b = NodePath("../../Back")
+angular_limit_enabled = true
+angular_limit_lower = -0.532325
+angular_limit_upper = 0.492183
+script = ExtResource("2_28aoi")
+
+[node name="Back" type="RigidBody2D" parent="."]
+position = Vector2(586, 330)
+rotation = 0.0237683
+linear_damp = 7.623
+angular_damp = 19.057
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Back"]
+position = Vector2(-6, 5)
+shape = SubResource("CapsuleShape2D_28aoi")
+
+[node name="Polygon2D" type="Polygon2D" parent="Back"]
+position = Vector2(-590, -340)
+color = Color(0.355314, 0.355314, 0.355314, 1)
+polygon = PackedVector2Array(560, 295, 548, 321, 551, 392, 583, 429, 621, 383, 618, 318, 602, 294)
+
+[node name="fr2" parent="Back" instance=ExtResource("1_pq8q7")]
+position = Vector2(29, 35)
+
+[node name="fr1" parent="Back" instance=ExtResource("1_pq8q7")]
+position = Vector2(29, -26)
+
+[node name="fl2" parent="Back" instance=ExtResource("1_jnlp7")]
+position = Vector2(-40, 37)
+
+[node name="fl1" parent="Back" instance=ExtResource("1_jnlp7")]
+position = Vector2(-42, -22)
+
+[node name="FootBrain" type="Node" parent="." node_paths=PackedStringArray("groups")]
+script = ExtResource("2_vvh5c")
+groups = [NodePath("FootGroup"), NodePath("FootGroup2")]
+metadata/_custom_type_script = "uid://dbph82u47iy1w"
+
+[node name="FootGroup" type="Node" parent="FootBrain" node_paths=PackedStringArray("feet")]
+script = ExtResource("3_28aoi")
+feet = [NodePath("../../Body/fr0"), NodePath("../../Back/fr2"), NodePath("../../Back/fl1")]
+metadata/_custom_type_script = "uid://b6j0skkjsk10q"
+
+[node name="FootGroup2" type="Node" parent="FootBrain" node_paths=PackedStringArray("feet")]
+script = ExtResource("3_28aoi")
+feet = [NodePath("../../Back/fr1"), NodePath("../../Body/fl0"), NodePath("../../Back/fl2")]
+metadata/_custom_type_script = "uid://b6j0skkjsk10q"
