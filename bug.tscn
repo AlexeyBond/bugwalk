@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bdtas23trrln7"]
+[gd_scene load_steps=28 format=3 uid="uid://bdtas23trrln7"]
 
 [ext_resource type="PackedScene" uid="uid://drh7l5q0x1cv0" path="res://foot_l.tscn" id="1_c761e"]
 [ext_resource type="PackedScene" uid="uid://b24x4j7t0eoc1" path="res://foot.tscn" id="2_5tblr"]
@@ -8,6 +8,21 @@
 [ext_resource type="Texture2D" uid="uid://cpc6qvusgrcvc" path="res://sprites/path1154.png" id="4_mawgr"]
 [ext_resource type="Script" uid="uid://b6j0skkjsk10q" path="res://foot_group.gd" id="4_n80v8"]
 [ext_resource type="Texture2D" uid="uid://jmmuv6ywlxb2" path="res://sprites/path1540.png" id="6_d8ihr"]
+[ext_resource type="Texture2D" uid="uid://diym5tro5hbdm" path="res://sprites/path2253.png" id="7_h1eq8"]
+[ext_resource type="Texture2D" uid="uid://cianj2dhdb1iv" path="res://sprites/path1542.png" id="7_pghv7"]
+[ext_resource type="Texture2D" uid="uid://cx2mnenygwo8o" path="res://sprites/path2247.png" id="8_bfv18"]
+[ext_resource type="Texture2D" uid="uid://bopmubdmhc113" path="res://sprites/path9519.png" id="8_pnbvc"]
+[ext_resource type="Texture2D" uid="uid://0sw1s10gsg3n" path="res://sprites/path2249.png" id="9_pnbvc"]
+[ext_resource type="Script" uid="uid://caxe7aq6kaxo3" path="res://bug_antenna.gd" id="11_hhn5n"]
+[ext_resource type="Texture2D" uid="uid://cpygrv5qjpk1t" path="res://sprites/path9603.png" id="11_xt574"]
+[ext_resource type="Texture2D" uid="uid://jwa4iqj2wkox" path="res://sprites/path9521.png" id="11_yu0r6"]
+[ext_resource type="Texture2D" uid="uid://d10mjuh754iml" path="res://sprites/path9523.png" id="12_mvwvm"]
+[ext_resource type="Texture2D" uid="uid://dfljuhhaloexi" path="res://sprites/g9555.png" id="13_lovmc"]
+[ext_resource type="Texture2D" uid="uid://gbt6onn7bkl8" path="res://sprites/path9557.png" id="14_v0hqx"]
+[ext_resource type="Texture2D" uid="uid://bidx20mgoo1io" path="res://sprites/path9601.png" id="15_wbbvh"]
+[ext_resource type="Texture2D" uid="uid://duclgduo1shp4" path="res://sprites/path9561.png" id="16_xt574"]
+[ext_resource type="Texture2D" uid="uid://c4iykq7vln75d" path="res://sprites/g9599.png" id="17_hhn5n"]
+[ext_resource type="Texture2D" uid="uid://cmquwsht8sni5" path="res://sprites/path9559.png" id="18_wcncw"]
 
 [sub_resource type="GDScript" id="GDScript_c761e"]
 script/source = "extends Node2D
@@ -24,6 +39,10 @@ script/source = "extends CharacterBody2D
 @export var foot_brain: FootBrain
 
 @export var agent: NavigationAgent2D
+
+@export var head: Node2D
+
+@export_range(0.05, 0.4) var max_head_turn: float = 0.1
 
 func _move_kb(delta: float):
 		#translate(
@@ -53,6 +72,8 @@ func _move_by_nav(delta):
 		global_rotation,
 		Vector2.UP.angle_to(agent.get_next_path_position() - global_position)
 	)
+
+	head.rotation = clamp(angle_delta_to_next_path, -max_head_turn, max_head_turn)
 
 	if abs(angle_delta_to_next_path) > 0.1:
 		rotate(1 * delta * sign(angle_delta_to_next_path))
@@ -116,16 +137,19 @@ height = 120.0
 script = SubResource("GDScript_c761e")
 body = NodePath("Body")
 
-[node name="Body" type="CharacterBody2D" parent="." node_paths=PackedStringArray("foot_brain", "agent")]
+[node name="Body" type="CharacterBody2D" parent="." node_paths=PackedStringArray("foot_brain", "agent", "head")]
 position = Vector2(1.99994, -53)
 rotation = 0.0237683
 script = SubResource("GDScript_pq8q7")
 foot_brain = NodePath("../FootBrain")
 agent = NodePath("NavigationAgent2D")
+head = NodePath("Head")
+max_head_turn = 0.152
 
 [node name="fl0" parent="Body" instance=ExtResource("1_c761e")]
 position = Vector2(-14.9482, 2.35593)
 flip_direction = false
+move_speed = 300.0
 move_want_threshold = 10.9
 
 [node name="Bone2D" parent="Body/fl0/Skeleton2D" index="0"]
@@ -173,6 +197,7 @@ position = Vector2(-61.3377, -55.5579)
 [node name="fr0" parent="Body" instance=ExtResource("2_5tblr")]
 position = Vector2(13.0439, 1.69048)
 flip_direction = true
+move_speed = 300.0
 move_want_threshold = 10.667
 
 [node name="Bone2D" parent="Body/fr0/Skeleton2D" index="0"]
@@ -240,7 +265,7 @@ angular_limit_upper = 0.523599
 position = Vector2(-25.6852, 55.6262)
 node_a = NodePath("..")
 node_b = NodePath("../../Back")
-softness = 5.86
+softness = 3.84
 angular_limit_lower = -0.523599
 angular_limit_upper = 0.523599
 
@@ -248,7 +273,7 @@ angular_limit_upper = 0.523599
 position = Vector2(27.2998, 54.3666)
 node_a = NodePath("..")
 node_b = NodePath("../../Back")
-softness = 5.86
+softness = 3.84
 angular_limit_lower = -0.523599
 angular_limit_upper = 0.523599
 
@@ -268,6 +293,69 @@ rotation = -0.0237683
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("6_d8ihr")
 
+[node name="Head" type="Node2D" parent="Body"]
+show_behind_parent = true
+position = Vector2(-2.37963, -15.948)
+
+[node name="Path2253" type="Sprite2D" parent="Body/Head"]
+modulate = Color(0.46045, 0.355149, 9.62615e-08, 1)
+position = Vector2(-14.4936, -62.6732)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_h1eq8")
+
+[node name="Path9519" type="Sprite2D" parent="Body/Head/Path2253"]
+modulate = Color(1, 0.179677, 0.0540926, 1)
+show_behind_parent = true
+position = Vector2(14.8072, -50.3661)
+scale = Vector2(1, 1)
+texture = ExtResource("8_pnbvc")
+
+[node name="Path2254" type="Sprite2D" parent="Body/Head"]
+modulate = Color(0.47419, 0.448056, 9.62615e-08, 1)
+position = Vector2(12.4988, -63.3149)
+scale = Vector2(-0.5, 0.5)
+texture = ExtResource("7_h1eq8")
+
+[node name="Path9520" type="Sprite2D" parent="Body/Head/Path2254"]
+modulate = Color(1, 0.179677, 0.0540926, 1)
+show_behind_parent = true
+position = Vector2(13.1849, -49.7007)
+rotation = -3.14159
+scale = Vector2(-1, -1)
+texture = ExtResource("8_pnbvc")
+
+[node name="Path2247" type="Sprite2D" parent="Body/Head"]
+modulate = Color(0.745406, 0.00147646, 0.881965, 1)
+position = Vector2(0.358034, -27.0161)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_bfv18")
+
+[node name="Path2249" type="Sprite2D" parent="Body/Head"]
+modulate = Color(0, 0.523953, 0.324009, 1)
+position = Vector2(0.0490756, -40.0125)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_pnbvc")
+
+[node name="ant_l" type="Node2D" parent="Body/Head"]
+position = Vector2(-26.4427, -60.3886)
+script = ExtResource("11_hhn5n")
+
+[node name="Path9603" type="Sprite2D" parent="Body/Head/ant_l"]
+modulate = Color(0.655147, 0.000240846, 0.631601, 1)
+position = Vector2(-44.1049, -45.9648)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("11_xt574")
+
+[node name="ant_r" type="Node2D" parent="Body/Head"]
+position = Vector2(22.5673, -60.5534)
+script = ExtResource("11_hhn5n")
+
+[node name="Path9603" type="Sprite2D" parent="Body/Head/ant_r"]
+modulate = Color(0.655147, 0.000240846, 0.631601, 1)
+position = Vector2(44.8938, -47.0802)
+scale = Vector2(-0.5, 0.5)
+texture = ExtResource("11_xt574")
+
 [node name="Back" type="RigidBody2D" parent="."]
 position = Vector2(5.99994, 43)
 rotation = 0.0237683
@@ -284,17 +372,218 @@ polygon = PackedVector2Array(560, 295, 548, 321, 551, 392, 583, 429, 621, 383, 6
 position = Vector2(-6, 5)
 shape = SubResource("CapsuleShape2D_28aoi")
 
-[node name="fr2" parent="Back" instance=ExtResource("2_5tblr")]
-position = Vector2(29, 35)
+[node name="fl1" parent="Back" instance=ExtResource("1_c761e")]
+position = Vector2(-42, -22)
+scale = Vector2(1, 1)
+
+[node name="Bone2D" parent="Back/fl1/Skeleton2D" index="0"]
+position = Vector2(14.1283, -14.3479)
+
+[node name="Polygon2D" parent="Back/fl1/Skeleton2D/Bone2D" index="0"]
+visible = false
+
+[node name="Bone2D2" parent="Back/fl1/Skeleton2D/Bone2D" index="1"]
+scale = Vector2(0.99999, 0.99999)
+
+[node name="Polygon2D" parent="Back/fl1/Skeleton2D/Bone2D/Bone2D2" index="0"]
+visible = false
+
+[node name="Bone2D" parent="Back/fl1/Skeleton2D/Bone2D/Bone2D2" index="1"]
+position = Vector2(31.8518, -21.6509)
+
+[node name="Path9601" type="Sprite2D" parent="Back/fl1/Skeleton2D/Bone2D/Bone2D2/Bone2D" index="0"]
+modulate = Color(0.496285, 0.501436, 3.85046e-07, 1)
+position = Vector2(33.5369, -5.41311)
+rotation = -2.55786
+scale = Vector2(0.500005, 0.500005)
+texture = ExtResource("15_wbbvh")
+
+[node name="Path9561" type="Sprite2D" parent="Back/fl1/Skeleton2D/Bone2D/Bone2D2" index="2"]
+modulate = Color(0, 0.548584, 0.469299, 1)
+position = Vector2(16.0902, -10.4893)
+rotation = -2.5341
+scale = Vector2(0.500005, 0.500005)
+texture = ExtResource("16_xt574")
+
+[node name="G9599" type="Sprite2D" parent="Back/fl1/Skeleton2D/Bone2D/Bone2D2/Path9561"]
+modulate = Color(0.321728, 0.321728, 0.321728, 1)
+show_behind_parent = true
+position = Vector2(-5.4279, 24.1358)
+texture = ExtResource("17_hhn5n")
+
+[node name="Path9559" type="Sprite2D" parent="Back/fl1/Skeleton2D/Bone2D" index="2"]
+modulate = Color(0.156876, 0.67078, 3.85046e-07, 1)
+position = Vector2(27.1989, 0.469991)
+rotation = 2.88414
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("18_wcncw")
 
 [node name="fr1" parent="Back" instance=ExtResource("2_5tblr")]
 position = Vector2(29, -26)
+scale = Vector2(1, 1)
+
+[node name="Bone2D" parent="Back/fr1/Skeleton2D" index="0"]
+position = Vector2(-17.8827, -11.2747)
+rotation = -0.208923
+
+[node name="Polygon2D" parent="Back/fr1/Skeleton2D/Bone2D" index="0"]
+visible = false
+
+[node name="Bone2D2" parent="Back/fr1/Skeleton2D/Bone2D" index="1"]
+position = Vector2(54.9845, -1.30713)
+rotation = 0.679873
+scale = Vector2(0.99999, 0.99999)
+
+[node name="Polygon2D" parent="Back/fr1/Skeleton2D/Bone2D/Bone2D2" index="0"]
+visible = false
+
+[node name="Bone2D" parent="Back/fr1/Skeleton2D/Bone2D/Bone2D2" index="1"]
+position = Vector2(37.9615, 15.6638)
+
+[node name="Path9601" type="Sprite2D" parent="Back/fr1/Skeleton2D/Bone2D/Bone2D2/Bone2D" index="0"]
+modulate = Color(0.496285, 0.501436, 3.85046e-07, 1)
+position = Vector2(32.9886, 3.12655)
+rotation = -3.76562
+scale = Vector2(0.5, -0.5)
+texture = ExtResource("15_wbbvh")
+
+[node name="Path9561" type="Sprite2D" parent="Back/fr1/Skeleton2D/Bone2D/Bone2D2" index="2"]
+modulate = Color(0, 0.548584, 0.469299, 1)
+position = Vector2(19.0396, 8.05014)
+rotation = -3.98623
+scale = Vector2(0.5, -0.5)
+texture = ExtResource("16_xt574")
+
+[node name="G9599" type="Sprite2D" parent="Back/fr1/Skeleton2D/Bone2D/Bone2D2/Path9561"]
+modulate = Color(0.321728, 0.321728, 0.321728, 1)
+show_behind_parent = true
+position = Vector2(-5.4279, 24.1358)
+texture = ExtResource("17_hhn5n")
+
+[node name="Path9559" type="Sprite2D" parent="Back/fr1/Skeleton2D/Bone2D" index="2"]
+modulate = Color(0.156876, 0.67078, 3.85046e-07, 1)
+position = Vector2(25.9689, -1.61763)
+rotation = -2.97233
+scale = Vector2(0.5, -0.5)
+texture = ExtResource("18_wcncw")
+
+[node name="fr2" parent="Back" instance=ExtResource("2_5tblr")]
+position = Vector2(29, 35)
+move_want_threshold = 30.267
+move_need_threshold = 42.097
+
+[node name="Bone2D" parent="Back/fr2/Skeleton2D" index="0"]
+position = Vector2(-3.22272, -2.60347)
+
+[node name="Polygon2D" parent="Back/fr2/Skeleton2D/Bone2D" index="0"]
+visible = false
+
+[node name="Bone2D2" parent="Back/fr2/Skeleton2D/Bone2D" index="1"]
+position = Vector2(68.4561, 18.3783)
+
+[node name="Polygon2D" parent="Back/fr2/Skeleton2D/Bone2D/Bone2D2" index="0"]
+visible = false
+
+[node name="Bone2D" parent="Back/fr2/Skeleton2D/Bone2D/Bone2D2" index="1"]
+position = Vector2(18.5164, 63.5785)
+rotation = 1.0961
+
+[node name="Path9557" type="Sprite2D" parent="Back/fr2/Skeleton2D/Bone2D/Bone2D2/Bone2D" index="0"]
+modulate = Color(0.672445, 0.219613, 0, 1)
+position = Vector2(42.018, -1.87611)
+rotation = -1.14984
+scale = Vector2(-0.5, 0.5)
+texture = ExtResource("14_v0hqx")
+
+[node name="Path9523" type="Sprite2D" parent="Back/fr2/Skeleton2D/Bone2D/Bone2D2" index="2"]
+modulate = Color(1.92523e-07, 0.279407, 0.344889, 1)
+position = Vector2(8.75832, 31.8011)
+rotation = -3.4442
+scale = Vector2(0.5, -0.5)
+texture = ExtResource("12_mvwvm")
+
+[node name="G9555" type="Sprite2D" parent="Back/fr2/Skeleton2D/Bone2D/Bone2D2/Path9523"]
+modulate = Color(0.473976, 0.473976, 0.473976, 1)
+position = Vector2(5.13964, 47.8914)
+texture = ExtResource("13_lovmc")
+
+[node name="Path9521" type="Sprite2D" parent="Back/fr2/Skeleton2D/Bone2D" index="2"]
+modulate = Color(0.227813, 0.418207, 0, 1)
+position = Vector2(36.275, 11.141)
+rotation = -0.25408
+scale = Vector2(-0.5, 0.5)
+texture = ExtResource("11_yu0r6")
+
+[node name="rest_target" parent="Back/fr2" index="1"]
+position = Vector2(87.2732, 59.2633)
 
 [node name="fl2" parent="Back" instance=ExtResource("1_c761e")]
 position = Vector2(-40, 37)
+move_want_threshold = 29.8
+move_need_threshold = 39.912
 
-[node name="fl1" parent="Back" instance=ExtResource("1_c761e")]
-position = Vector2(-42, -22)
+[node name="Bone2D" parent="Back/fl2/Skeleton2D" index="0"]
+position = Vector2(0.748107, -5.05812)
+rest = Transform2D(-0.967042, -0.254618, 0.254618, -0.967042, 0.748107, -5.05812)
+
+[node name="Polygon2D" parent="Back/fl2/Skeleton2D/Bone2D" index="0"]
+visible = false
+
+[node name="Bone2D2" parent="Back/fl2/Skeleton2D/Bone2D" index="1"]
+position = Vector2(48.8903, -50.5544)
+scale = Vector2(0.99999, 0.99999)
+rest = Transform2D(0.648672, -0.761054, 0.761054, 0.648672, 48.8903, -50.5544)
+
+[node name="Polygon2D" parent="Back/fl2/Skeleton2D/Bone2D/Bone2D2" index="0"]
+visible = false
+
+[node name="Bone2D" parent="Back/fl2/Skeleton2D/Bone2D/Bone2D2" index="1"]
+position = Vector2(36.9267, -55.9063)
+rotation = -0.714369
+rest = Transform2D(0.755507, -0.655141, 0.655141, 0.755507, 36.9267, -55.9063)
+
+[node name="Path9557" type="Sprite2D" parent="Back/fl2/Skeleton2D/Bone2D/Bone2D2/Bone2D" index="0"]
+modulate = Color(0.672445, 0.219613, 0, 1)
+position = Vector2(40.7505, 8.33271)
+rotation = -1.81973
+scale = Vector2(0.500005, 0.500005)
+texture = ExtResource("14_v0hqx")
+
+[node name="Path9523" type="Sprite2D" parent="Back/fl2/Skeleton2D/Bone2D/Bone2D2" index="2"]
+modulate = Color(1.92523e-07, 0.279407, 0.344889, 1)
+position = Vector2(16.8022, -27.2527)
+rotation = -2.5341
+scale = Vector2(0.500005, 0.500005)
+texture = ExtResource("12_mvwvm")
+
+[node name="G9555" type="Sprite2D" parent="Back/fl2/Skeleton2D/Bone2D/Bone2D2/Path9523"]
+modulate = Color(0.473976, 0.473976, 0.473976, 1)
+position = Vector2(5.13964, 47.8914)
+texture = ExtResource("13_lovmc")
+
+[node name="Path9521" type="Sprite2D" parent="Back/fl2/Skeleton2D/Bone2D" index="2"]
+modulate = Color(0.227813, 0.418207, 0, 1)
+position = Vector2(24.5092, -26.857)
+rotation = 2.88414
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("11_yu0r6")
+
+[node name="rest_target" parent="Back/fl2" index="1"]
+position = Vector2(-68.6633, 62.6106)
+
+[node name="Path1542" type="Sprite2D" parent="Back"]
+modulate = Color(0, 0.851319, 0.852553, 1)
+position = Vector2(-35.7176, 43.8613)
+rotation = -0.0237683
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_pghv7")
+
+[node name="Path1543" type="Sprite2D" parent="Back"]
+modulate = Color(7.5084e-06, 0.7923, 0.811893, 1)
+position = Vector2(25.2652, 42.4115)
+rotation = -0.0237683
+scale = Vector2(-0.5, 0.5)
+texture = ExtResource("7_pghv7")
 
 [node name="FootBrain" type="Node" parent="." node_paths=PackedStringArray("groups")]
 script = ExtResource("3_xve05")
@@ -315,3 +604,7 @@ metadata/_custom_type_script = "uid://b6j0skkjsk10q"
 
 [editable path="Body/fl0"]
 [editable path="Body/fr0"]
+[editable path="Back/fl1"]
+[editable path="Back/fr1"]
+[editable path="Back/fr2"]
+[editable path="Back/fl2"]
