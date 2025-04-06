@@ -283,7 +283,6 @@ target_desired_distance = 47.73
 avoidance_enabled = true
 radius = 41.45
 max_speed = 1357.86
-debug_enabled = true
 debug_path_custom_color = Color(0, 1, 0, 1)
 
 [node name="Path1540" type="Sprite2D" parent="Body"]
